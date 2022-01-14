@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="15dp"
@@ -24,51 +25,40 @@
             android:hint="@string/task_name" />
     </com.google.android.material.textfield.TextInputLayout>
 
-
-    <TextView
-        android:id="@+id/tv_task_description_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/task_description_label"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_task_name_wrapper" />
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/et_task_desc_wrapper"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_task_description_label">
+        app:layout_constraintTop_toBottomOf="@id/et_task_name_wrapper">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_task_desc"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="wrap_content"
+            android:hint="@string/task_description" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/bt_save_task"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:enabled="false"
         android:text="@string/save_task"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/bt_cancel_task"
-        app:layout_constraintTop_toBottomOf="@+id/et_task_desc_wrapper" />
+        app:layout_constraintEnd_toEndOf="@+id/et_task_desc_wrapper" />
 
     <Button
         android:id="@+id/bt_cancel_task"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/red"
         android:text="@string/cancel_task"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/bt_save_task"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_task_desc_wrapper" />
+        app:layout_constraintStart_toStartOf="@+id/et_task_desc_wrapper" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
