@@ -1,16 +1,17 @@
-package com.test.stechoq.viewmodel
+package com.test.stechoq.ui.add
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.test.stechoq.database.task.Task
 import com.test.stechoq.database.task.TaskDao
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class TaskViewModel(private val taskDao: TaskDao) : ViewModel() {
-    fun getAllTasks(): List<Task> {
-        return taskDao.getAllTasks()
-    }
-
+class AddTaskViewModel(private val taskDao: TaskDao): ViewModel() {
     fun insertTask(task: Task) {
-        return taskDao.insertTask(task)
+        viewModelScope.launch(Dispatchers.IO) {
+            taskDao.insertTask(task)
+        }
     }
 
     fun updateTask(task: Task) {

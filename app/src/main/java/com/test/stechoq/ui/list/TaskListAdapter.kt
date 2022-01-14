@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.test.stechoq.database.task.Task
 import com.test.stechoq.databinding.TaskItemBinding
 
-class TaskListAdapter(
-    private val taskList: List<Task>
-) :
-    RecyclerView.Adapter<TaskListAdapter.TaskListViewHolder>() {
+class TaskListAdapter : RecyclerView.Adapter<TaskListAdapter.TaskListViewHolder>() {
+
+    private val taskList = arrayListOf<Task>()
+
     class TaskListViewHolder(private val binding: TaskItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(task: Task) {
@@ -34,5 +34,12 @@ class TaskListAdapter(
 
     override fun getItemCount(): Int {
         return taskList.size
+    }
+
+    fun submitList(newList: List<Task>) {
+        taskList.clear()
+        taskList.addAll(newList)
+//        notifyItemInserted(itemCount)
+        notifyDataSetChanged()
     }
 }
