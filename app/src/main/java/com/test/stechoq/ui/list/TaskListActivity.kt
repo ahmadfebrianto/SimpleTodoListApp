@@ -5,22 +5,31 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.test.stechoq.R
-import com.test.stechoq.database.DataSource
+import com.test.stechoq.TaskApplication
+import com.test.stechoq.database.task.Task
 import com.test.stechoq.databinding.ActivityTaskListBinding
 import com.test.stechoq.ui.add.AddTaskActivity
+import com.test.stechoq.viewmodel.TaskViewModel
+import com.test.stechoq.viewmodel.TaskViewModelFactory
 
 class TaskListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTaskListBinding
+//    private lateinit var viewModel: ViewModelProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTaskListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val taskList = DataSource.loadDummyTask()
+        val viewModel: TaskViewModel by viewModels {
+            TaskViewModelFactory((this.application as TaskApplication).database.taskDao())
+        }
+
+        val taskList = listOf<Task>()
         binding.rvTaskList.adapter = TaskListAdapter(taskList)
         binding.rvTaskList.setHasFixedSize(true)
 

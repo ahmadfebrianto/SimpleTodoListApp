@@ -3,7 +3,7 @@ package com.test.stechoq.ui.list
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.test.stechoq.database.entity.Task
+import com.test.stechoq.database.task.Task
 import com.test.stechoq.databinding.TaskItemBinding
 
 class TaskListAdapter(

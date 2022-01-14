@@ -1,7 +1,0 @@
-package com.test.stechoq.database.entity
-
-data class Task(
-    val id: Int,
-    val name: String,
-    val description: String
-)
