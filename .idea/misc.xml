@@ -3,9 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/layout/activity_add_task.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.18802083333333333" />
         <entry key="app/src/main/res/layout/activity_task_list.xml" value="0.18802083333333333" />
+        <entry key="app/src/main/res/layout/add_task_button.xml" value="0.20260416666666667" />
         <entry key="app/src/main/res/layout/task_item.xml" value="0.20260416666666667" />
+        <entry key="app/src/main/res/menu/menu.xml" value="0.20260416666666667" />
       </map>
     </option>
   </component>
