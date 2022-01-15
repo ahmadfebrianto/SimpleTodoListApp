@@ -43,22 +43,9 @@ class TaskListActivity : AppCompatActivity() {
             taskListAdapter.submitList(listViewModel.taskList.value as ArrayList)
             binding.rvTaskList.adapter = taskListAdapter
         })
-    }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle item selection
-        return when (item.itemId) {
-            R.id.menu_add_task -> {
-                startActivity(Intent(this, AddTaskActivity::class.java))
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
+        binding.fabAddTask.setOnClickListener {
+            startActivity(Intent(this, AddTaskActivity::class.java))
         }
     }
 
