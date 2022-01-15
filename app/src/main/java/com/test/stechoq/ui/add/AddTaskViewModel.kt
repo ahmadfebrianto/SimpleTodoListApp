@@ -9,18 +9,8 @@ import kotlinx.coroutines.launch
 
 class AddTaskViewModel(private val taskDao: TaskDao): ViewModel() {
     fun insertTask(task: Task) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             taskDao.insertTask(task)
-        }
-    }
-
-    fun updateTask(task: Task) {
-        return taskDao.updateTask(task)
-    }
-
-    fun deleteTask(task: Task) {
-        viewModelScope.launch(Dispatchers.IO) {
-            taskDao.deleteTask(task)
         }
     }
 }

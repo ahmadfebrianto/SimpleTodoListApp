@@ -15,12 +15,10 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 
 
 class AddTaskActivity : AppCompatActivity() {
-
     private lateinit var binding: TaskItemDetailBinding
     private val addTaskViewModel: AddTaskViewModel by viewModels {
         TaskViewModelFactory((this.application as TaskApplication).database.taskDao())
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,9 +31,7 @@ class AddTaskActivity : AppCompatActivity() {
         setCancelTaskButtonListener()
         setSaveTaskButtonListener()
         setRootLayoutListener()
-
     }
-
 
     @DelicateCoroutinesApi
     private fun setSaveTaskButtonListener() {
@@ -65,6 +61,7 @@ class AddTaskActivity : AppCompatActivity() {
         }
     }
 
+    // Hide keyboard when clicking outside edit text
     private fun Activity.hideSoftKeyboard() {
         (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).apply {
             hideSoftInputFromWindow(currentFocus?.windowToken, 0)

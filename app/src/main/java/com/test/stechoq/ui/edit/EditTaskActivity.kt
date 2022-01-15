@@ -29,21 +29,16 @@ class EditTaskActivity : AppCompatActivity() {
 
         supportActionBar?.title = getString(R.string.edit_task)
 
-        setSaveTaskButtonListener()
-        setCancelTaskButtonListener()
-        setFieldsTextListener()
-
-
         val extras = intent.extras
         if (null != extras) {
             val taskId = extras.getInt(TASK_ID)
-            editTaskViewModel.setTaskId(taskId)
-            editTaskViewModel.task.observe(this, { _task ->
-                if (_task != null) {
-                    task = _task
-                    populateFields(task)
-                }
-            })
+            editTaskViewModel.getTaskById(taskId).observe(this) { _task ->
+                task = _task
+                populateFields(task)
+                setFieldsTextListener()
+                setSaveTaskButtonListener()
+                setCancelTaskButtonListener()
+            }
         }
 
     }
@@ -60,6 +55,7 @@ class EditTaskActivity : AppCompatActivity() {
         }
     }
 
+    // Populate edit text fields with clicked task
     private fun populateFields(task: Task) {
         binding.etTaskName.setText(task.name)
         binding.etTaskDesc.setText(task.description)

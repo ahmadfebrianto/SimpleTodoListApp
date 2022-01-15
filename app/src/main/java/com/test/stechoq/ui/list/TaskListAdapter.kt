@@ -3,15 +3,15 @@ package com.test.stechoq.ui.list
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.test.stechoq.database.task.Task
 import com.test.stechoq.databinding.TaskItemBinding
 import com.test.stechoq.ui.edit.EditTaskActivity
 import com.test.stechoq.ui.edit.EditTaskActivity.Companion.TASK_ID
 
-class TaskListAdapter : RecyclerView.Adapter<TaskListAdapter.TaskListViewHolder>() {
-
-    private val taskList = arrayListOf<Task>()
+class TaskListAdapter : ListAdapter<Task, TaskListAdapter.TaskListViewHolder>(DiffCallback) {
 
     class TaskListViewHolder(private val binding: TaskItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -41,18 +41,19 @@ class TaskListAdapter : RecyclerView.Adapter<TaskListAdapter.TaskListViewHolder>
     }
 
     override fun onBindViewHolder(holder: TaskListViewHolder, position: Int) {
-        val task = taskList[position]
-        holder.bind(task)
+        holder.bind(getItem(position))
     }
 
-    override fun getItemCount(): Int {
-        return taskList.size
-    }
+    companion object {
+        private val DiffCallback = object : DiffUtil.ItemCallback<Task>() {
+            override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
+                return oldItem.id == newItem.id
+            }
 
-    fun submitList(newList: List<Task>) {
-        taskList.clear()
-        taskList.addAll(newList)
-//        notifyItemInserted(itemCount)
-        notifyDataSetChanged()
+            override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
+                return oldItem == newItem
+            }
+
+        }
     }
 }
