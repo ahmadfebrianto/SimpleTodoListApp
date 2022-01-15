@@ -31,11 +31,8 @@ class EditTaskActivity : AppCompatActivity() {
 
         setSaveTaskButtonListener()
         setCancelTaskButtonListener()
+        setFieldsTextListener()
 
-        binding.etTaskName.addTextChangedListener {
-            val text = binding.etTaskName.editableText
-            binding.btSaveTask.isEnabled = text.isNotEmpty() && text.toString() != task.name
-        }
 
         val extras = intent.extras
         if (null != extras) {
@@ -44,14 +41,26 @@ class EditTaskActivity : AppCompatActivity() {
             editTaskViewModel.task.observe(this, { _task ->
                 if (_task != null) {
                     task = _task
-                    populateField(task)
+                    populateFields(task)
                 }
             })
         }
 
     }
 
-    private fun populateField(task: Task) {
+    private fun setFieldsTextListener() {
+        binding.etTaskName.addTextChangedListener {
+            val text = binding.etTaskName.editableText
+            binding.btSaveTask.isEnabled = text.isNotEmpty() && text.toString() != task.name
+        }
+
+        binding.etTaskDesc.addTextChangedListener {
+            val text = binding.etTaskDesc.editableText
+            binding.btSaveTask.isEnabled = text.isNotEmpty() && text.toString() != task.name
+        }
+    }
+
+    private fun populateFields(task: Task) {
         binding.etTaskName.setText(task.name)
         binding.etTaskDesc.setText(task.description)
 
