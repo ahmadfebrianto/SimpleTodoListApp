@@ -19,6 +19,8 @@ class AddTaskViewModel(private val taskDao: TaskDao): ViewModel() {
     }
 
     fun deleteTask(task: Task) {
-        return taskDao.deleteTask(task)
+        viewModelScope.launch(Dispatchers.IO) {
+            taskDao.deleteTask(task)
+        }
     }
 }

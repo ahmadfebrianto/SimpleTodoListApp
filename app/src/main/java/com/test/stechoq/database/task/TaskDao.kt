@@ -1,5 +1,6 @@
 package com.test.stechoq.database.task
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
@@ -15,4 +16,7 @@ interface TaskDao {
 
     @Delete
     fun deleteTask(task: Task)
+
+    @Query("SELECT * FROM tasks WHERE id = :taskId")
+    fun getTaskById(taskId: Int): Task
 }

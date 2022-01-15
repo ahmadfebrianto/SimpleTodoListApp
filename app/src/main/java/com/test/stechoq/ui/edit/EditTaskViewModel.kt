@@ -1,4 +1,4 @@
-package com.test.stechoq.ui.list
+package com.test.stechoq.ui.edit
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,22 +9,21 @@ import com.test.stechoq.database.task.TaskDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class TaskListViewModel(private val taskDao: TaskDao) : ViewModel() {
 
-    private val _taskList = MutableLiveData<List<Task>>()
-    fun getAllTasks() {
+class EditTaskViewModel(private val taskDao: TaskDao) : ViewModel() {
+
+    private val _task = MutableLiveData<Task>()
+    fun updateTask(task: Task) {
         viewModelScope.launch(Dispatchers.IO) {
-            _taskList.postValue(taskDao.getAllTasks())
+            taskDao.updateTask(task)
         }
     }
 
-    fun deleteTask(task: Task) {
+    fun setTaskId(taskId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            taskDao.deleteTask(task)
+            _task.postValue(taskDao.getTaskById(taskId))
         }
     }
 
-    val taskList: LiveData<List<Task>> = _taskList
-
-
+    val task: LiveData<Task> = _task
 }

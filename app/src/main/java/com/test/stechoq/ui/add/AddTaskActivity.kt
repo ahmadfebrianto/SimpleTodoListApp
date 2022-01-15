@@ -9,18 +9,14 @@ import androidx.core.widget.addTextChangedListener
 import com.test.stechoq.R
 import com.test.stechoq.TaskApplication
 import com.test.stechoq.database.task.Task
-import com.test.stechoq.databinding.ActivityAddTaskBinding
-import com.test.stechoq.ui.list.TaskListViewModel
+import com.test.stechoq.databinding.TaskItemDetailBinding
 import com.test.stechoq.ui.TaskViewModelFactory
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 
 class AddTaskActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityAddTaskBinding
+    private lateinit var binding: TaskItemDetailBinding
     private val addTaskViewModel: AddTaskViewModel by viewModels {
         TaskViewModelFactory((this.application as TaskApplication).database.taskDao())
     }
@@ -28,7 +24,7 @@ class AddTaskActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAddTaskBinding.inflate(layoutInflater)
+        binding = TaskItemDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         supportActionBar?.title = getString(R.string.add_task)

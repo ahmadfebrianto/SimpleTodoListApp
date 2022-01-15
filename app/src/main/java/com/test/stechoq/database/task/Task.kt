@@ -14,9 +14,9 @@ data class Task(
 
     @NonNull
     @ColumnInfo(name = "task_name")
-    val name: String,
+    var name: String,
 
     @NonNull
     @ColumnInfo(name = "task_description")
-    val description: String
+    var description: String
 )
