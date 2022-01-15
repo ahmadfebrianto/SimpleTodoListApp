@@ -48,9 +48,6 @@ class AddTaskActivity : AppCompatActivity() {
             )
             addTaskViewModel.insertTask(task)
             finish()
-//            GlobalScope.launch(Dispatchers.IO) {
-//
-//            }
         }
     }
 

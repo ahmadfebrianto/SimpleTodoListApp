@@ -8,6 +8,7 @@
         <entry key="app/src/main/res/layout/activity_task_list.xml" value="0.18802083333333333" />
         <entry key="app/src/main/res/layout/add_task_button.xml" value="0.20260416666666667" />
         <entry key="app/src/main/res/layout/task_item.xml" value="0.20260416666666667" />
+        <entry key="app/src/main/res/layout/task_item_detail.xml" value="0.20260416666666667" />
         <entry key="app/src/main/res/menu/menu.xml" value="0.20260416666666667" />
       </map>
     </option>
