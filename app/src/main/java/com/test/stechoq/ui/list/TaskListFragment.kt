@@ -3,41 +3,58 @@ package com.test.stechoq.ui.list
 import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavHostController
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import com.test.stechoq.TaskApplication
-import com.test.stechoq.databinding.ActivityTaskListBinding
+import com.test.stechoq.databinding.FragmentTaskListBinding
 import com.test.stechoq.ui.TaskViewModelFactory
-import com.test.stechoq.ui.add.AddTaskActivity
 
-class TaskListActivity : AppCompatActivity() {
+class TaskListFragment : Fragment() {
+    private var _binding: FragmentTaskListBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var recyclerView: RecyclerView
 
-    private lateinit var binding: ActivityTaskListBinding
-    private val taskListViewModel: TaskListViewModel by viewModels {
-        TaskViewModelFactory((this.application as TaskApplication).database.taskDao())
+    private val taskListViewModel: TaskListViewModel by activityViewModels {
+        TaskViewModelFactory((activity?.application as TaskApplication).database.taskDao())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityTaskListBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentTaskListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         initAction()
 
         val taskListAdapter = TaskListAdapter()
-        val recyclerView = binding.rvTaskList
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView = binding.rvTaskList
+        recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = taskListAdapter
         recyclerView.setHasFixedSize(true)
 
         // Add line separator between task item
-        val itemDecor = DividerItemDecoration(this, VERTICAL)
+        val itemDecor = DividerItemDecoration(context, RecyclerView.VERTICAL)
         recyclerView.addItemDecoration(itemDecor)
 
         // Observe task list change
@@ -48,7 +65,8 @@ class TaskListActivity : AppCompatActivity() {
         }
 
         binding.fabAddTask.setOnClickListener {
-            startActivity(Intent(this, AddTaskActivity::class.java))
+            val action = TaskListFragmentDirections.actionTaskListFragmentToAddTaskFragment()
+            it.findNavController().navigate(action)
         }
     }
 
@@ -81,9 +99,13 @@ class TaskListActivity : AppCompatActivity() {
     }
 
     private fun showToast(msg: String) {
-        val toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT)
+        val toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT)
         toast.setGravity(Gravity.BOTTOM, 0, 300)
         toast.show()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

@@ -2,31 +2,45 @@ package com.test.stechoq.ui.add
 
 import android.app.Activity
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import com.test.stechoq.R
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import com.test.stechoq.TaskApplication
 import com.test.stechoq.database.task.Task
 import com.test.stechoq.databinding.TaskItemDetailBinding
 import com.test.stechoq.ui.TaskViewModelFactory
 import kotlinx.coroutines.DelicateCoroutinesApi
 
+class AddTaskFragment : Fragment() {
+    private var _binding: TaskItemDetailBinding? = null
+    private val binding get() = _binding!!
 
-class AddTaskActivity : AppCompatActivity() {
-    private lateinit var binding: TaskItemDetailBinding
     private val addTaskViewModel: AddTaskViewModel by viewModels {
-        TaskViewModelFactory((this.application as TaskApplication).database.taskDao())
+        TaskViewModelFactory((activity?.application as TaskApplication).database.taskDao())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = TaskItemDetailBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setHasOptionsMenu(true)
+    }
 
-        supportActionBar?.title = getString(R.string.add_task)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = TaskItemDetailBinding.inflate(layoutInflater)
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setTaskNameListener()
         setCancelTaskButtonListener()
         setSaveTaskButtonListener()
@@ -43,13 +57,13 @@ class AddTaskActivity : AppCompatActivity() {
                 description = taskDescription
             )
             addTaskViewModel.insertTask(task)
-            finish()
+            it.findNavController().popBackStack()
         }
     }
 
     private fun setCancelTaskButtonListener() {
         binding.btCancelTask.setOnClickListener {
-            finish()
+            it.findNavController().popBackStack()
         }
     }
 
@@ -63,15 +77,20 @@ class AddTaskActivity : AppCompatActivity() {
 
     // Hide keyboard when clicking outside edit text
     private fun Activity.hideSoftKeyboard() {
-        (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).apply {
+        (getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager).apply {
             hideSoftInputFromWindow(currentFocus?.windowToken, 0)
         }
     }
 
     private fun setRootLayoutListener() {
         binding.rootLayout.setOnClickListener {
-            hideSoftKeyboard()
+            activity?.hideSoftKeyboard()
             binding.etTaskName.clearFocus()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

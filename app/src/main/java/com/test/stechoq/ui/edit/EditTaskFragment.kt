@@ -2,21 +2,25 @@ package com.test.stechoq.ui.edit
 
 import android.os.Build
 import android.os.Bundle
-import androidx.activity.viewModels
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import com.test.stechoq.R
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.test.stechoq.TaskApplication
 import com.test.stechoq.database.task.Task
 import com.test.stechoq.databinding.TaskItemDetailBinding
 import com.test.stechoq.ui.TaskViewModelFactory
 
-class EditTaskActivity : AppCompatActivity() {
+class EditTaskFragment : Fragment() {
+    private var _binding: TaskItemDetailBinding? = null
+    private val binding get() = _binding!!
 
-    private lateinit var binding: TaskItemDetailBinding
     private val editTaskViewModel: EditTaskViewModel by viewModels {
-        TaskViewModelFactory((this.application as TaskApplication).database.taskDao())
+        TaskViewModelFactory((activity?.application as TaskApplication).database.taskDao())
     }
 
     private lateinit var task: Task
@@ -24,14 +28,23 @@ class EditTaskActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = TaskItemDetailBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setHasOptionsMenu(true)
+    }
 
-        supportActionBar?.title = getString(R.string.edit_task)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = TaskItemDetailBinding.inflate(layoutInflater)
+        return binding.root
+    }
 
-        val extras = intent.extras
-        if (null != extras) {
-            val taskId = extras.getInt(TASK_ID)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        arguments?.let {
+            val taskId = it.getInt(TASK_ID)
             editTaskViewModel.getTaskById(taskId).observe(this) { _task ->
                 task = _task
                 populateFields(task)
@@ -40,7 +53,6 @@ class EditTaskActivity : AppCompatActivity() {
                 setCancelTaskButtonListener()
             }
         }
-
     }
 
     private fun setFieldsTextListener() {
@@ -69,17 +81,22 @@ class EditTaskActivity : AppCompatActivity() {
                 this.description = binding.etTaskDesc.text.toString()
                 editTaskViewModel.updateTask(this)
             }
-            finish()
+            this.findNavController().popBackStack()
         }
     }
 
     private fun setCancelTaskButtonListener() {
         binding.btCancelTask.setOnClickListener {
-            finish()
+            this.findNavController().popBackStack()
         }
     }
 
     companion object {
         const val TASK_ID = "task_id"
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

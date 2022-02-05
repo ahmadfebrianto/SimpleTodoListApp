@@ -1,15 +1,13 @@
 package com.test.stechoq.ui.list
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.test.stechoq.database.task.Task
 import com.test.stechoq.databinding.TaskItemBinding
-import com.test.stechoq.ui.edit.EditTaskActivity
-import com.test.stechoq.ui.edit.EditTaskActivity.Companion.TASK_ID
 
 class TaskListAdapter : ListAdapter<Task, TaskListAdapter.TaskListViewHolder>(DiffCallback) {
 
@@ -24,11 +22,12 @@ class TaskListAdapter : ListAdapter<Task, TaskListAdapter.TaskListViewHolder>(Di
                 tvTaskName.text = task.name
                 tvTaskDescription.text = task.description
                 itemView.setOnClickListener {
-                    val intent = Intent(itemView.context, EditTaskActivity::class.java)
-                    intent.putExtra(TASK_ID, task.id)
-                    itemView.context.startActivity(intent)
+                    val action =
+                        TaskListFragmentDirections.actionTaskListFragmentToEditTaskFragment(
+                            taskId = task.id!!
+                        )
+                    itemView.findNavController().navigate(action)
                 }
-
             }
         }
     }
